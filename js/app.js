@@ -49,11 +49,20 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
             $scope.currentTemp = data.currently.temperature;
             $scope.precipProb = data.currently.precipProbability;
             $scope.windSpeed = data.currently.windSpeed;
+            $scope.dateTime = data.currently.time;
+            $scope.today = new Date();
             console.log(data);
         });
         
     };
+
+    $scope.convertToDate = function (dateTime){
+
+        return new Date(dateTime * 1000);
+
+    };
     
+    $scope.geoCode();
 
 }]);
 

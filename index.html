@@ -78,11 +78,11 @@
 					<div class="forecast-container">
 						<div class="today forecast">
 							<div class="forecast-header">
-								<div class="day">Monday</div>
-								<div class="date">6 Oct</div>
+								<div class="day">{{today | date: 'EEEE'}}</div>
+								<div class="date">{{convertToDate(dateTime) | date: 'd MMM'}}</div>
 							</div> <!-- .forecast-header -->
 							<div class="forecast-content">
-								<div class="location">{{ search }}</div>
+								<div class="location">{{search}}</div>
 								<!-- current location -->
 							    <div class="text-info text-right">
 							        {{loc.lat | lat:0}}, {{loc.lon | lon:0}}
@@ -93,8 +93,8 @@
 										<img src="images/icons/icon-1.svg" alt="" width=90>
 									</div>	
 								</div>
-								<span><img src="images/icon-umberella.png" alt="">{{ precipProb | number:0}}%</span>
-								<span><img src="images/icon-wind.png" alt="">{{ windSpeed | number:0}}km/h</span>
+								<span><img src="images/icon-umberella.png" alt="">{{precipProb | number:0}}%</span>
+								<span><img src="images/icon-wind.png" alt="">{{windSpeed | number:0}}km/h</span>
 							</div>
 						</div>
 						<div class="forecast">
