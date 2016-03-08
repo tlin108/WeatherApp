@@ -1,6 +1,6 @@
 var app = angular.module('weatherApp', []);
 
-app.controller('weatherCtrl', ['$scope', function($scope) {
+app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
 
 	// current location
     $scope.loc = { lat: 40.7127837, lon: -74.0059413 };
@@ -31,12 +31,29 @@ app.controller('weatherCtrl', ['$scope', function($scope) {
                     var loc = results[0].geometry.location;
                     $scope.search = results[0].formatted_address;
                     $scope.gotoLocation(loc.lat(), loc.lng());
+                    $scope.findWeather(loc.lat(), loc.lng());
                 } else {
                     alert("Sorry, this search produced no results.");
                 }
             });
         }
     };
+
+    // find current weather
+    $scope.findWeather = function (lat, lon) {
+        
+        var url = 'https://api.forecast.io/forecast/07bb8b7f6f8767a188e5d47ac551ef42' + '/' + lat + ',' + lon + '?callback=JSON_CALLBACK';
+        
+        $http.jsonp(url)
+        .success(function(data){
+            $scope.currentTemp = data.currently.temperature;
+            $scope.precipProb = data.currently.precipProbability;
+            $scope.windSpeed = data.currently.windSpeed;
+            console.log(data);
+        });
+        
+    };
+    
 
 }]);
 
