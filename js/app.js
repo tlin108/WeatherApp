@@ -39,7 +39,7 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
         }
     };
 
-    // find current weather
+    // find current weather using forecast.io api
     $scope.findWeather = function (lat, lon) {
         
         var url = 'https://api.forecast.io/forecast/07bb8b7f6f8767a188e5d47ac551ef42' + '/' + lat + ',' + lon + '?callback=JSON_CALLBACK';
@@ -53,16 +53,20 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
             $scope.icon = data.currently.icon;
             $scope.today = new Date();
             console.log(data);
+        }).error(function(status){
+            console.log(status);
         });
         
     };
 
+    // format data into readable date & time
     $scope.convertToDate = function (dateTime){
 
         return new Date(dateTime * 1000);
 
     };
     
+    // load initial search setting
     $scope.geoCode();
 
 }]);
