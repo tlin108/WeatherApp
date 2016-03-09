@@ -52,6 +52,8 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
             $scope.dateTime = data.currently.time;
             $scope.icon = data.currently.icon;
             $scope.today = new Date();
+            $scope.summary = data.currently.summary;
+            $scope.weekReport = data.daily.data;
             console.log(data);
         }).error(function(status){
             console.log(status);
