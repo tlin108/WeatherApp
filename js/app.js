@@ -50,6 +50,7 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
             $scope.precipProb = data.currently.precipProbability;
             $scope.windSpeed = data.currently.windSpeed;
             $scope.dateTime = data.currently.time;
+            $scope.icon = data.currently.icon;
             $scope.today = new Date();
             console.log(data);
         });
