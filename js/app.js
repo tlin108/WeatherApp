@@ -1,6 +1,8 @@
-var app = angular.module('weatherApp', []);
+var app = angular.module('weatherApp', ["firebase"]);
 
 app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
+
+    var myFirebaseRef = new Firebase("https://vivid-inferno-197.firebaseio.com/");
 
 	// current location
     $scope.loc = { lat: 40.7127837, lon: -74.0059413 };
@@ -32,6 +34,7 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
                     $scope.search = results[0].formatted_address;
                     $scope.gotoLocation(loc.lat(), loc.lng());
                     $scope.findWeather(loc.lat(), loc.lng());
+                    $scope.addToHistory();
                 } else {
                     alert("Sorry, this search produced no results.");
                 }
@@ -66,6 +69,14 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
 
         return new Date(dateTime * 1000);
 
+    };
+
+    $scope.addToHistory = function (){
+
+        myFirebaseRef.push({
+            search: $scope.search,
+            date: new Date()
+        });
     };
     
     // load initial search setting
