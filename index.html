@@ -41,13 +41,14 @@
 	<body ng-controller="weatherCtrl">
 		
 		<div class="site-content">
-			<div class="site-header">
+			<div class="site-header" ng-controller="userCtrl">
 				<div class="container">
 					<a href="index.html" class="branding">
 						<img src="images/logo.png" alt="" class="logo">
 						<div class="logo-type">
 							<h1 class="site-title">SkyCast</h1>
-							<small class="site-description">Weather at your fingertip</small>
+							<small class="site-description" ng-show="authData"> Welcome! {{authData.password.email}}</small>
+							<small class="site-description">View weather at your fingertip</small>
 						</div>
 					</a>
 
@@ -56,9 +57,10 @@
 						<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 						<ul class="menu">
 							<li class="menu-item current-menu-item"><a href="index.html">Home</a></li>
-							<li class="menu-item"><a href="news.html">Time Machine</a></li>
-							<li class="menu-item"><a href="live-cameras.html">My Searches</a></li>
-							<li class="menu-item"><a href="login.html">Login</a></li>
+							<li class="menu-item"><a href="news.html">Time Capsule</a></li>
+							<li class="menu-item" ng-show="authData"><a href="live-cameras.html">My Searches</a></li>
+							<li class="menu-item" ng-show="authData" ng-click="auth.$unauth()"><a href="#">Logout</a></li>
+							<li class="menu-item" ng-hide="authData"><a href="login.html">Login</a></li>
 						</ul> <!-- .menu -->
 					</div> <!-- .main-navigation -->
 
@@ -115,65 +117,16 @@
 					</div>
 				</div>
 			</div>
-			<main class="main-content">
+			<main class="main-content" data-bg-color="#262936">
 				<div class="fullwidth-block">
 					<div class="container">
-						<h2 class="section-title">Live cameras</h2>
+						<h2 class="section-title">Time Capsule</h2>
 						<div class="row">
 							<div class="col-md-3 col-sm-6">
 								<div class="live-camera">
 									<figure class="live-camera-cover"><img src="images/live-camera-1.jpg" alt=""></figure>
 									<h3 class="location">New York</h3>
 									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6">
-								<div class="live-camera">
-									<figure class="live-camera-cover"><img src="images/live-camera-2.jpg" alt=""></figure>
-									<h3 class="location">Los Angeles</h3>
-									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6">
-								<div class="live-camera">
-									<figure class="live-camera-cover"><img src="images/live-camera-3.jpg" alt=""></figure>
-									<h3 class="location">Chicago</h3>
-									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6">
-								<div class="live-camera">
-									<figure class="live-camera-cover"><img src="images/live-camera-4.jpg" alt=""></figure>
-									<h3 class="location">London</h3>
-									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="fullwidth-block" data-bg-color="#262936">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-4">
-								<div class="news">
-									<div class="date">06.10</div>
-									<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo saepe assumenda dolorem modi, expedita voluptatum ducimus necessitatibus. Asperiores quod reprehenderit necessitatibus harum, mollitia, odit et consequatur maxime nisi amet doloremque.</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="news">
-									<div class="date">06.10</div>
-									<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
-									<p>Nobis architecto consequatur ab, ea, eum autem aperiam accusantium placeat vitae facere explicabo temporibus minus distinctio cum optio quis, dignissimos eius aspernatur fuga. Praesentium totam, corrupti beatae amet expedita veritatis.</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="news">
-									<div class="date">06.10</div>
-									<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
-									<p>Enim impedit officiis placeat qui recusandae doloremque possimus, iusto blanditiis, quam optio delectus maiores. Possimus rerum, velit cum natus eos. Cumque pariatur beatae asperiores, esse libero quas ad dolorem. Voluptates.</p>
 								</div>
 							</div>
 						</div>
@@ -211,20 +164,6 @@
 									<li><a href="#">Magni dolores eos qui ratione voluptatem sequi</a></li>
 									<li><a href="#">Neque porro quisquam est qui dolorem ipsum quia</a></li>
 								</ul>
-							</div>
-							<div class="col-md-4">
-								<h2 class="section-title">Awesome Photos</h2>
-								<div class="photo-grid">
-									<a href="#"><img src="images/thumb-1.jpg" alt="#"></a>
-									<a href="#"><img src="images/thumb-2.jpg" alt="#"></a>
-									<a href="#"><img src="images/thumb-3.jpg" alt="#"></a>
-									<a href="#"><img src="images/thumb-4.jpg" alt="#"></a>
-									<a href="#"><img src="images/thumb-5.jpg" alt="#"></a>
-									<a href="#"><img src="images/thumb-6.jpg" alt="#"></a>
-									<a href="#"><img src="images/thumb-7.jpg" alt="#"></a>
-									<a href="#"><img src="images/thumb-8.jpg" alt="#"></a>
-									<a href="#"><img src="images/thumb-9.jpg" alt="#"></a>
-								</div>
 							</div>
 						</div>
 					</div>

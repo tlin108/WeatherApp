@@ -92,6 +92,8 @@ app.factory('Auth', ['$firebaseAuth', function($firebaseAuth){
 
 app.controller('userCtrl', ['$scope', 'Auth', function($scope, Auth){
 
+    $scope.auth = Auth;
+
     $scope.createUser = function(){
         $scope.message = null;
         $scope.error = null;
@@ -100,11 +102,35 @@ app.controller('userCtrl', ['$scope', 'Auth', function($scope, Auth){
             email    : $scope.userEmail,
             password : $scope.userPw
         }).then(function(userData){
-            $scope.message = "Successfully created user with Id: " + $scope.userEmail;
+            $scope.message = "Created user with Id: " + $scope.userEmail;
         }).catch(function(error){
             $scope.error = error;
         });
     };
+
+    $scope.login = function(){
+        $scope.message = null;
+        $scope.authData = null;
+        $scope.error = null;
+
+        Auth.$authWithPassword({
+            email    : $scope.userEmail,
+            password : $scope.userPw
+        }).then(function(authData) {
+            $scope.message = "You're now logged in as " + authData.password.email;
+            $scope.authData = authData;
+        }).catch(function(error) {
+            $scope.error = error;
+            console.log("Authentication failed:", error);
+        })
+
+        $scope.userEmail = "";
+        $scope.userPw = "";
+    };
+
+    $scope.auth.$onAuth(function(authData){
+        $scope.authData = authData;
+    });
 
 }]);
 

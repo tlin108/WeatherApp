@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="weatherApp">
 	<head>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +10,8 @@
 		<!-- Loading third party fonts -->
 		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
 		<link href="fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
 		<!-- Loading main css file -->
 		<link rel="stylesheet" href="style.css">
@@ -36,7 +38,7 @@
 	</head>
 
 
-	<body>
+	<body ng-controller="userCtrl">
 		
 		<div class="site-content">
 			<div class="site-header">
@@ -45,7 +47,8 @@
 						<img src="images/logo.png" alt="" class="logo">
 						<div class="logo-type">
 							<h1 class="site-title">SkyCast</h1>
-							<small class="site-description">Weather at your fingertip</small>
+							<small class="site-description" ng-show="authData"> Welcome! {{authData.password.email}}</small>
+							<small class="site-description">View weather at your fingertip</small>
 						</div>
 					</a>
 
@@ -54,9 +57,10 @@
 						<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 						<ul class="menu">
 							<li class="menu-item"><a href="index.html">Home</a></li>
-							<li class="menu-item"><a href="news.html">Time Machine</a></li>
-							<li class="menu-item"><a href="live-cameras.html">My Searches</a></li>
-							<li class="menu-item current-menu-item"><a href="login.html">Login</a></li>
+							<li class="menu-item"><a href="news.html">Time Capsule</a></li>
+							<li class="menu-item" ng-show="authData"><a href="live-cameras.html">My Searches</a></li>
+							<li class="menu-item" ng-show="authData" ng-click="auth.$unauth()"><a href="#">Logout</a></li>
+							<li class="menu-item current-menu-item" ng-hide="authData"><a href="login.html">Login</a></li>
 						</ul> <!-- .menu -->
 					</div> <!-- .main-navigation -->
 
@@ -75,24 +79,34 @@
 
 				<div class="fullwidth-block">
 					<div class="container">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="alert alert-success" ng-if="message">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+								<strong> Success! </strong> {{ message }}
+							</div>
+							<div class="alert alert-danger" ng-if="error">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+								<strong> Error! </strong> {{ error }}
+							</div>
+						</div>
 						<div class="col-md-9 col-md-offset-3">
 							<h2 class="section-title">User Login</h2>
 							<p> To use My Searches functionality, you must logged in as user</p>
 							<form action="#" class="contact-form">
 								<div class="row">
-									<div class="col-md-1"><span>User ID</span></div>
-									<div class="col-md-6"><input type="text" placeholder="Email Addresss..."></div>
+									<div class="col-md-3"><span>User ID</span></div>
+									<div class="col-md-5"><input type="text" placeholder="Email Addresss..." ng-model="userEmail"></div>
 								</div>
 								<div class="row">
-									<div class="col-md-1"><span>Password</span></div>
-									<div class="col-md-6"><input type="password" placeholder="Password..."></div>
+									<div class="col-md-3"><span>Password</span></div>
+									<div class="col-md-5"><input type="password" placeholder="Password..." ng-model="userPw"></div>
 								</div>
 								<div class="row">
 									<div class="text-left col-md-3">
 										<a href="signup.html" class="button">Sign Up</a>
 									</div>
-									<div class="text-right col-md-4">
-										<input type="submit" value="Log in">
+									<div class="text-right col-md-5">
+										<input type="submit" value="Log in" ng-click="login()">
 									</div>
 								</div>
 							</form>
