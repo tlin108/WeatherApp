@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="weatherApp">
 	<head>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,7 +36,7 @@
 	</head>
 
 
-	<body>
+	<body ng-controller="userCtrl">
 		
 		<div class="site-content">
 			<div class="site-header">
@@ -75,24 +75,26 @@
 
 				<div class="fullwidth-block">
 					<div class="container">
-						<div class="col-md-10 col-md-offset-2">
+						<div class="col-md-9 col-md-offset-3">
+							<h3 ng-if="message">Message: <strong>{{ message }}</strong></h3>
+							<h3 ng-if="error">Error: <strong>{{ error }}</strong></h3>
 							<h2 class="section-title">User Sign Up</h2>
 							<p> Fill below fields to register as a user</p>
 							<form action="#" class="contact-form">
 								<div class="row">
 									<div class="col-md-1"><span>User ID</span></div>
-									<div class="col-md-8"><input type="text" placeholder="Email Addresss..."></div>
+									<div class="col-md-6"><input type="text" placeholder="Email Addresss..." ng-model="userEmail"></div>
 								</div>
 								<div class="row">
 									<div class="col-md-1"><span>Password</span></div>
-									<div class="col-md-8"><input type="password" placeholder="Password..."></div>
+									<div class="col-md-6"><input type="password" placeholder="Password..." ng-model="userPw"></div>
 								</div>
 								<div class="row">
-									<div class="text-left col-md-4">
+									<div class="text-left col-md-3">
 										<a href="login.html" class="button">Go Back</a>
 									</div>
-									<div class="text-right col-md-5">
-										<input type="submit" value="Log in">
+									<div class="text-right col-md-4">
+										<input type="submit" value="Create Account" ng-click="createUser()">
 									</div>
 								</div>
 							</form>

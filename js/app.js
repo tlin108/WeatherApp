@@ -1,4 +1,4 @@
-var app = angular.module('weatherApp', ["firebase"]);
+var app = angular.module('weatherApp', ['firebase']);
 
 app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
 
@@ -81,6 +81,30 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
     
     // load initial search setting
     $scope.geoCode();
+
+}]);
+
+app.factory('Auth', ['$firebaseAuth', function($firebaseAuth){
+    var myFirebaseRef = new Firebase("https://vivid-inferno-197.firebaseio.com/");
+    return $firebaseAuth(myFirebaseRef);
+    }
+]);
+
+app.controller('userCtrl', ['$scope', 'Auth', function($scope, Auth){
+
+    $scope.createUser = function(){
+        $scope.message = null;
+        $scope.error = null;
+
+        Auth.$createUser({
+            email    : $scope.userEmail,
+            password : $scope.userPw
+        }).then(function(userData){
+            $scope.message = "Successfully created user with Id: " + $scope.userEmail;
+        }).catch(function(error){
+            $scope.error = error;
+        });
+    };
 
 }]);
 
