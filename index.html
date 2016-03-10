@@ -40,8 +40,8 @@
 
 	<body ng-controller="weatherCtrl">
 		
-		<div class="site-content">
-			<div class="site-header" ng-controller="userCtrl">
+		<div class="site-content" ng-controller="userCtrl">
+			<div class="site-header">
 				<div class="container">
 					<a href="index.html" class="branding">
 						<img src="images/logo.png" alt="" class="logo">
@@ -57,8 +57,8 @@
 						<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 						<ul class="menu">
 							<li class="menu-item current-menu-item"><a href="index.html">Home</a></li>
-							<li class="menu-item"><a href="news.html">Time Capsule</a></li>
-							<li class="menu-item" ng-show="authData"><a href="live-cameras.html">My Searches</a></li>
+							<li class="menu-item"><a href="timeCapsule.html">Time Capsule</a></li>
+							<li class="menu-item" ng-show="authData"><a href="mySearches.html">My Searches</a></li>
 							<li class="menu-item" ng-show="authData" ng-click="auth.$unauth()"><a href="#">Logout</a></li>
 							<li class="menu-item" ng-hide="authData"><a href="login.html">Login</a></li>
 						</ul> <!-- .menu -->
@@ -117,53 +117,51 @@
 					</div>
 				</div>
 			</div>
-			<main class="main-content" data-bg-color="#262936">
-				<div class="fullwidth-block">
-					<div class="container">
-						<h2 class="section-title">Time Capsule</h2>
-						<div class="row">
-							<div class="col-md-3 col-sm-6">
-								<div class="live-camera">
-									<figure class="live-camera-cover"><img src="images/live-camera-1.jpg" alt=""></figure>
-									<h3 class="location">New York</h3>
-									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 
-				<div class="fullwidth-block">
+			<div class="container">
+				<h1 class="section-title">Application features</h1>
+			</div>
+
+			<main class="main-content">
+				<div class="fullwidth-block" data-bg-color="#262936">
 					<div class="container">
 						<div class="row">
-							<div class="col-md-4">
-								<h2 class="section-title">Application features</h2>
+							<div class="col-md-6">
+								<h3 class="section-title">Time Capsule</h3>
 								<ul class="arrow-feature">
 									<li>
-										<h3>Natus error sit voluptatem accusantium</h3>
-										<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
+										<h3>Important!!</h3>
+										<p>Accepts only reasonable time period as input (for many places, 60 years in the past to 10 years into the future)</p>
 									</li>
 									<li>
-										<h3>Natus error sit voluptatem accusantium</h3>
-										<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
-									</li>
-									<li>
-										<h3>Natus error sit voluptatem accusantium</h3>
-										<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
+										<h3>Purpose</h3>
+										<p>Allows user to view historic weather information in chart/graph of a chosen area </p>
 									</li>
 								</ul>
+								<br>
+								<div class="text-left">
+									<a href="timeCapsule.html" class="button">Check It Out</a>
+								</div>
 							</div>
-							<div class="col-md-4">
-								<h2 class="section-title">Weather analyssis</h2>
-								<ul class="arrow-list">
-									<li><a href="#">Accusantium doloremque laudantium rem aperiam</a></li>
-									<li><a href="#">Eaque ipsa quae ab illo inventore veritatis quasi</a></li>
-									<li><a href="#">Architecto beatae vitae dicta sunt explicabo</a></li>
-									<li><a href="#">Nemo enim ipsam voluptatem quia voluptas</a></li>
-									<li><a href="#">Aspernatur aut odit aut fugit, sed quia consequuntur</a></li>
-									<li><a href="#">Magni dolores eos qui ratione voluptatem sequi</a></li>
-									<li><a href="#">Neque porro quisquam est qui dolorem ipsum quia</a></li>
+							<div class="col-md-6">
+								<h2 class="section-title">My Searches</h2>
+								<ul class="arrow-feature">
+									<li>
+										<h3>Important!!</h3>
+										<p>Guest must create an account and sign in as user in order to use this feature</p>
+									</li>
+									<li>
+										<h3>Purpose</h3>
+										<p>Allows user to track his or her search history</p>
+									</li>
 								</ul>
+								<br>
+								<div class="text-left">
+									<a href="mySearches.html" class="button" ng-show="authData">Check It Out</a>
+								</div>
+								<div class="text-left">
+									<a href="login.html" class="button" ng-hide="authData">Log In</a>
+								</div>
 							</div>
 						</div>
 					</div>

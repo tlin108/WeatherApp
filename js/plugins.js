@@ -86,4 +86,3 @@ var coverVid=function(a,b,c){function d(a,b){var c=null;return function(){var d=
 	})
 
 }(jQuery);
-
