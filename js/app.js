@@ -1,8 +1,14 @@
 var app = angular.module('weatherApp', ['firebase']);
 
-app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
 
-    var myFirebaseRef = new Firebase("https://vivid-inferno-197.firebaseio.com/");
+app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray', 
+  function($scope, $http, Auth, $firebaseArray) {
+
+    $scope.auth = Auth;
+
+    $scope.auth.$onAuth(function(authData){
+        $scope.authData = authData;
+    });
 
 	// current location
     $scope.loc = { lat: 40.7127837, lon: -74.0059413 };
@@ -34,7 +40,7 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
                     $scope.search = results[0].formatted_address;
                     $scope.gotoLocation(loc.lat(), loc.lng());
                     $scope.findWeather(loc.lat(), loc.lng());
-                    $scope.addToHistory();
+                    $scope.addToSearchHistory();
                 } else {
                     alert("Sorry, this search produced no results.");
                 }
@@ -70,15 +76,41 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
         return new Date(dateTime * 1000);
 
     };
-
-    $scope.addToHistory = function (){
-
-        myFirebaseRef.push({
-            search: $scope.search,
-            date: new Date()
-        });
-    };
     
+
+    $scope.addToSearchHistory = function (){
+        if($scope.authData && $scope.search != "New York, NY, USA"){
+            var userID = $scope.authData.uid;
+
+            var ref = new Firebase("https://vivid-inferno-197.firebaseio.com/users/"+userID);
+            var list = $firebaseArray(ref);
+
+            list.$add({ 
+                search : $scope.search,
+                date   : new Date()
+            }).then(function(){
+                var query = ref.orderByKey().limitToLast(20);
+
+                $scope.searchList = $firebaseArray(query);
+                console.log($scope.searchList);
+            });
+        }
+    };
+
+    $scope.showSearchHistory = function (){
+        if($scope.authData){
+            var userID = $scope.authData.uid;
+
+            var ref = new Firebase("https://vivid-inferno-197.firebaseio.com/users/"+userID);
+            
+            var query = ref.orderByKey().limitToLast(20);
+
+            $scope.searchList = $firebaseArray(query);
+
+            console.log($scope.searchList);
+        }
+    };
+
     // load initial search setting
     $scope.geoCode();
 
@@ -87,8 +119,7 @@ app.controller('weatherCtrl', ['$scope', '$http', function($scope, $http) {
 app.factory('Auth', ['$firebaseAuth', function($firebaseAuth){
     var myFirebaseRef = new Firebase("https://vivid-inferno-197.firebaseio.com/");
     return $firebaseAuth(myFirebaseRef);
-    }
-]);
+}]);
 
 app.controller('userCtrl', ['$scope', 'Auth', function($scope, Auth){
 
@@ -133,6 +164,14 @@ app.controller('userCtrl', ['$scope', 'Auth', function($scope, Auth){
     });
 
 }]);
+
+
+// reverse the order of firebasearray but creates errors on console
+app.filter('reverse', function() {
+    return function(items) {
+      return items.slice().reverse();
+    };
+  });
 
 // formats a number as a latitude (e.g. 40.46... => "40°27'44"N")
 app.filter('lat', function () {
