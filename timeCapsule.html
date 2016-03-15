@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="weatherApp">
 	<head>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
 		
-		<title>Compass Starter by Ariona, Rian</title>
+		<title>SkyCast Time Capsule</title>
 
 		<!-- Loading third party fonts -->
 		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
@@ -13,6 +13,24 @@
 
 		<!-- Loading main css file -->
 		<link rel="stylesheet" href="style.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+		<!-- Latest AngularJS -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+
+		<script src="http://maps.googleapis.com/maps/api/js?language=en"></script>
+
+		<script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+		<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		
 		<!--[if lt IE 9]>
 		<script src="js/ie-support/html5.js"></script>
@@ -22,16 +40,17 @@
 	</head>
 
 
-	<body>
+	<body ng-controller="weatherCtrl">
 		
 		<div class="site-content">
-			<div class="site-header">
+			<div class="site-header" ng-controller="userCtrl">
 				<div class="container">
 					<a href="index.html" class="branding">
 						<img src="images/logo.png" alt="" class="logo">
 						<div class="logo-type">
-							<h1 class="site-title">Company name</h1>
-							<small class="site-description">tagline goes here</small>
+							<h1 class="site-title">SkyCast</h1>
+							<small class="site-description" ng-show="authData"> Welcome! {{authData.password.email}}</small>
+							<small class="site-description">View weather at your fingertip</small>
 						</div>
 					</a>
 
@@ -40,10 +59,10 @@
 						<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 						<ul class="menu">
 							<li class="menu-item"><a href="index.html">Home</a></li>
-							<li class="menu-item current-menu-item"><a href="news.html">News</a></li>
-							<li class="menu-item"><a href="live-cameras.html">Live cameras</a></li>
-							<li class="menu-item"><a href="photos.html">Photos</a></li>
-							<li class="menu-item"><a href="contact.html">Contact</a></li>
+							<li class="menu-item current-menu-item"><a href="timeCapsule.html">Time Capsule</a></li>
+							<li class="menu-item" ng-show="authData"><a href="mySearches.html">My Searches</a></li>
+							<li class="menu-item" ng-show="authData" ng-click="auth.$unauth()"><a href="#">Logout</a></li>
+							<li class="menu-item" ng-hide="authData"><a href="login.html">Login</a></li>
 						</ul> <!-- .menu -->
 					</div> <!-- .main-navigation -->
 
@@ -56,73 +75,42 @@
 				<div class="container">
 					<div class="breadcrumb">
 						<a href="index.html">Home</a>
-						<span>News</span>
+						<span>Time Capsule</span>
 					</div>
 				</div>
-				
-
 				<div class="fullwidth-block">
 					<div class="container">
 						<div class="row">
-							<div class="content col-md-8">
-								<div class="post">
-									<h2 class="entry-title">Nemo enim ipsam voluptatem quia voluptas</h2>
-									<div class="featured-image"><img src="images/featured-image-1.jpg" alt=""></div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem nulla rem dolores unde et cum illum odio, enim quis odit eveniet quaerat non libero, consequatur voluptatem harum ad veritatis necessitatibus.</p>
-									<a href="single.html" class="button">Read more</a>
-								</div>
-
-								<div class="post">
-									<h2 class="entry-title">Nemo enim ipsam voluptatem quia voluptas</h2>
-									<div class="featured-image"><img src="images/featured-image-2.jpg" alt=""></div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem nulla rem dolores unde et cum illum odio, enim quis odit eveniet quaerat non libero, consequatur voluptatem harum ad veritatis necessitatibus.</p>
-									<a href="single.html" class="button">Read more</a>
-								</div>
-
-								<div class="post">
-									<h2 class="entry-title">Nemo enim ipsam voluptatem quia voluptas</h2>
-									<div class="featured-image"><img src="images/featured-image-3.jpg" alt=""></div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem nulla rem dolores unde et cum illum odio, enim quis odit eveniet quaerat non libero, consequatur voluptatem harum ad veritatis necessitatibus.</p>
-									<a href="single.html" class="button">Read more</a>
-								</div>
-							</div>
-							<div class="sidebar col-md-3 col-md-offset-1">
-								<div class="widget">
-									<h3 class="widget-title">Hot News</h3>
-									<ul class="arrow-list">
-										<li><a href="#">Accusamus dignissimos</a></li>
-										<li><a href="#">Ducimus praesentium</a></li>
-										<li><a href="#">Voluptatum deleniti corrupti</a></li>
-										<li><a href="#">Wuos dolores excepturi sint</a></li>
-										<li><a href="#">Occaecati provident dolor</a></li>
-									</ul>
-								</div>
-
-								<div class="widget">
-									<h3 class="widget-title">Categories</h3>
-									<ul class="arrow-list">
-										<li><a href="#">Nemo enim ipsam</a></li>
-										<li><a href="#">Voluptatem voluptas</a></li>
-										<li><a href="#">Aspernatur aut odit</a></li>
-										<li><a href="#">Consequuntur magni</a></li>
-										<li><a href="#">Dolores ratione</a></li>
-										<li><a href="#">Voluptatem nesciunt</a></li>
-										<li><a href="#">Neque porro quisquam</a></li>
-										<li><a href="#">Dolorem ipsum quia</a></li>
-									</ul>
-								</div>
-
-								<div class="widget top-rated">
-									<h3 class="widget-title">Top rated posts</h3>
-									<ul>
-										<li><h3 class="entry-title"><a href="#">Doloremque laudantium lorem</a></h3><div class="rating"><strong>5.5</strong> (759 rates)</div></li>
-										<li><h3 class="entry-title"><a href="#">Doloremque laudantium lorem</a></h3><div class="rating"><strong>5.5</strong> (759 rates)</div></li>
-										<li><h3 class="entry-title"><a href="#">Doloremque laudantium lorem</a></h3><div class="rating"><strong>5.5</strong> (759 rates)</div></li>
-										<li><h3 class="entry-title"><a href="#">Doloremque laudantium lorem</a></h3><div class="rating"><strong>5.5</strong> (759 rates)</div></li>
-									</ul>
-								</div>
+							<div class="col-md-10 col-md-offset-2">
+								<h3 class="section-title">Time Capsule</h3>
+								<p>This feature will allow you to view historic or futuristic weather information in chart/graph of a chosen area</p>
+								<br>
 							</div>
 						</div>
+						<div class="row">
+							<div class="col-md-10 col-md-offset-2">
+							<form class="contact-form">
+								<div class="row">
+									<div class="col-md-3"><span>Location</span></div>
+									<div class="col-md-5"><input type="text" placeholder="Location..." ng-model="search"></div>
+								</div>
+								<div class="row">
+									<div class="col-md-3"><span>Date</span></div>
+									<div class="col-md-5"><input type="date" ng-model="capsuleDate"></div>
+								</div>
+								<div class="row">
+									<div class="text-right col-md-8">
+										<input type="submit" value="Activate Time Capsule" ng-click="timeCapsule()">
+									</div>
+								</div>
+							</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="fullwidth-block">
+					<div class="container">
+						<svg id="visualisation" width="1000" height="500"></svg>
 					</div>
 				</div>
 			</main> <!-- .main-content -->
@@ -146,7 +134,7 @@
 						</div>
 					</div>
 
-					<p class="colophon">Copyright 2014 Company name. Designed by Themezy. All rights reserved</p>
+					<p class="colophon">Copyright 2016 SkyCast. Designed by Themezy. Powered by Google Geocode API, Forecast.io API, Angular, and Firebase. All rights reserved</p>
 				</div>
 			</footer> <!-- .site-footer -->
 		</div>

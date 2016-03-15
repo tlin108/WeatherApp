@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
 		
-		<title>My Searches</title>
+		<title>SkyCast My Searches</title>
 
 		<!-- Loading third party fonts -->
 		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
@@ -70,15 +70,27 @@
 			</div> <!-- .site-header -->
 
 			<main class="main-content">
+				<div class="container">
+					<div class="breadcrumb">
+						<a href="index.html">Home</a>
+						<span>My Searches</span>
+					</div>
+				</div>
+
 				<div class="fullwidth-block">
 					<div class="container">
 						<div class="row">
 							<div class="col-md-8 col-md-offset-2">
 								<h3 class="section-title">My Search History</h3>
+								
+									<p>This feature will show your searches in ascending order (grabbing the most recent searches), with the newest search in the bottom</p>
+								
+								<br>
 								<div class="count filter-control">
-								<label for="">Show per page</label>
+								<label for="">Show item per page</label>
 									<span class="select control">
-										<select name="" id="">
+										<select name="" id="" ng-model="searchLimit">
+											 <option value="">-- Please select --</option> <!-- not selected / blank option -->
 											<option value="5">5</option>
 											<option value="10">10</option>
 											<option value="15">15</option>
@@ -87,6 +99,8 @@
 									</span>
 								</div>
 								&nbsp <input class="button" type="submit" value="View" ng-click="showSearchHistory()">
+								<br>
+								<br>
 								<ul class="arrow-list">
 									<li ng-repeat="item in searchList">
 										<h3>{{ item.search }}</h3>
@@ -118,7 +132,7 @@
 						</div>
 					</div>
 
-					<p class="colophon">Copyright 2014 Company name. Designed by Themezy. All rights reserved</p>
+					<p class="colophon">Copyright 2016 SkyCast. Designed by Themezy. Powered by Google Geocode API, Forecast.io API, Angular, and Firebase. All rights reserved</p>
 				</div>
 			</footer> <!-- .site-footer -->
 		</div>

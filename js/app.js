@@ -70,6 +70,96 @@ app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray',
         
     };
 
+    $scope.timeCapsule = function () {
+        console.log($scope.search);
+        console.log(Date.parse($scope.capsuleDate));
+
+        function InitChart() {
+                    var data = [{
+                        "sale": "202",
+                        "year": "2000"
+                    }, {
+                        "sale": "215",
+                        "year": "2002"
+                    }, {
+                        "sale": "179",
+                        "year": "2004"
+                    }, {
+                        "sale": "199",
+                        "year": "2006"
+                    }, {
+                        "sale": "134",
+                        "year": "2008"
+                    }, {
+                        "sale": "176",
+                        "year": "2010"
+                    }];
+                    var data2 = [{
+                        "sale": "152",
+                        "year": "2000"
+                    }, {
+                        "sale": "189",
+                        "year": "2002"
+                    }, {
+                        "sale": "179",
+                        "year": "2004"
+                    }, {
+                        "sale": "199",
+                        "year": "2006"
+                    }, {
+                        "sale": "134",
+                        "year": "2008"
+                    }, {
+                        "sale": "176",
+                        "year": "2010"
+                    }];
+                    var vis = d3.select("#visualisation"),
+                        WIDTH = 1000,
+                        HEIGHT = 500,
+                        MARGINS = {
+                            top: 20,
+                            right: 20,
+                            bottom: 20,
+                            left: 50
+                        },
+                        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2000, 2010]),
+                        yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([134, 215]),
+                        xAxis = d3.svg.axis()
+                        .scale(xScale),
+                        yAxis = d3.svg.axis()
+                        .scale(yScale)
+                        .orient("left");
+                    
+                    vis.append("svg:g")
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+                        .call(xAxis);
+                    vis.append("svg:g")
+                        .attr("class", "y axis")
+                        .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+                        .call(yAxis);
+                    var lineGen = d3.svg.line()
+                        .x(function(d) {
+                            return xScale(d.year);
+                        })
+                        .y(function(d) {
+                            return yScale(d.sale);
+                        })
+                        .interpolate("basis");
+                    vis.append('svg:path')
+                        .attr('d', lineGen(data))
+                        .attr('stroke', 'green')
+                        .attr('stroke-width', 2)
+                        .attr('fill', 'none');
+                    vis.append('svg:path')
+                        .attr('d', lineGen(data2))
+                        .attr('stroke', 'blue')
+                        .attr('stroke-width', 2)
+                        .attr('fill', 'none');
+        }
+        InitChart();
+    }
+
     // format data into readable date & time
     $scope.convertToDate = function (dateTime){
 
@@ -79,7 +169,7 @@ app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray',
     
 
     $scope.addToSearchHistory = function (){
-        if($scope.authData && $scope.search != "New York, NY, USA"){
+        if($scope.authData){
             var userID = $scope.authData.uid;
 
             var ref = new Firebase("https://vivid-inferno-197.firebaseio.com/users/"+userID);
@@ -99,20 +189,19 @@ app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray',
 
     $scope.showSearchHistory = function (){
         if($scope.authData){
-            var userID = $scope.authData.uid;
 
+            $scope.searchLimit = parseInt($scope.searchLimit, 10);
+
+            var userID = $scope.authData.uid;
             var ref = new Firebase("https://vivid-inferno-197.firebaseio.com/users/"+userID);
             
-            var query = ref.orderByKey().limitToLast(20);
+            var query = ref.orderByKey().limitToLast($scope.searchLimit);
 
             $scope.searchList = $firebaseArray(query);
 
             console.log($scope.searchList);
         }
     };
-
-    // load initial search setting
-    $scope.geoCode();
 
 }]);
 
@@ -151,12 +240,21 @@ app.controller('userCtrl', ['$scope', 'Auth', function($scope, Auth){
             $scope.message = "You're now logged in as " + authData.password.email;
             $scope.authData = authData;
         }).catch(function(error) {
-            $scope.error = error;
+            switch (error.code) {
+                    case "INVALID_EMAIL":
+                        $scope.error = "The specified user account email is invalid.";
+                        break;
+                    case "INVALID_PASSWORD":
+                        $scope.error = "The specified user account password is incorrect.";
+                        break;
+                    case "INVALID_USER":
+                        $scope.error = "The specified user account does not exist.";
+                        break;
+                    default:
+                        $scope.error = "Error logging user in:", error;
+            }
             console.log("Authentication failed:", error);
         })
-
-        $scope.userEmail = "";
-        $scope.userPw = "";
     };
 
     $scope.auth.$onAuth(function(authData){

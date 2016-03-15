@@ -56,8 +56,8 @@
 						<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 						<ul class="menu">
 							<li class="menu-item"><a href="index.html">Home</a></li>
-							<li class="menu-item"><a href="news.html">Time Capsule</a></li>
-							<li class="menu-item" ng-show="authData"><a href="live-cameras.html">My Searches</a></li>
+							<li class="menu-item"><a href="timeCapsule.html">Time Capsule</a></li>
+							<li class="menu-item" ng-show="authData"><a href="mySearches.html">My Searches</a></li>
 							<li class="menu-item" ng-show="authData" ng-click="auth.$unauth()"><a href="#">Logout</a></li>
 							<li class="menu-item current-menu-item" ng-hide="authData"><a href="login.html">Login</a></li>
 						</ul> <!-- .menu -->
@@ -72,18 +72,18 @@
 				<div class="container">
 					<div class="breadcrumb">
 						<a href="index.html">Home</a>
-						<span>Signup</span>
+						<span>Sign up</span>
 					</div>
 				</div>
 
 				<div class="fullwidth-block">
 					<div class="container">
 						<div class="col-md-8 col-md-offset-2">
-							<div class="alert alert-success" ng-if="message">
+							<div class="alert alert-success" ng-if="message" ng-cloak>
 								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 								<strong> Success! </strong> {{ message }}. You can now log in with the account
 							</div>
-							<div class="alert alert-danger" ng-if="error">
+							<div class="alert alert-danger" ng-if="error" ng-cloak>
 								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 								<strong> Error! </strong> {{ error }}
 							</div>
@@ -91,7 +91,7 @@
 						<div class="col-md-9 col-md-offset-3">
 							<h2 class="section-title">User Sign Up</h2>
 							<p> Fill below fields to register as a user</p>
-							<form action="#" class="contact-form">
+							<form class="contact-form">
 								<div class="row">
 									<div class="col-md-3"><span>User ID</span></div>
 									<div class="col-md-5"><input type="text" placeholder="Email Addresss..." ng-model="userEmail"></div>
@@ -140,7 +140,6 @@
 		</div>
 		
 		<script src="js/jquery-1.11.1.min.js"></script>
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
 		<script src="js/plugins.js"></script>
 		<script src="js/app.js"></script>
 		
