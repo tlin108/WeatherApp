@@ -8,27 +8,27 @@
 		<title>SkyCast</title>
 
 		<!-- Loading third party fonts -->
-		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+		<link href="//fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
 		<link href="fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 		<!-- Loading main css file -->
 		<link rel="stylesheet" href="style.css">
 
 		<!-- jQuery library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 		<!-- Latest compiled JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 		<!-- Latest AngularJS -->
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
 
-		<script src="http://maps.googleapis.com/maps/api/js?language=en"></script>
+		<script src="//maps.googleapis.com/maps/api/js?language=en"></script>
 
-		<script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
-		<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+		<script src="//cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+		<script src="//cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
 		
 		<!--[if lt IE 9]>
 		<script src="js/ie-support/html5.js"></script>
@@ -69,11 +69,11 @@
 				</div>
 			</div> <!-- .site-header -->
 
-			<div class="hero" data-bg-image="images/banner.png">
+			<div class="hero" data-bg-image="images/108271.jpg">
 				<div class="container">
 					<form class="find-location">
 						<input type="text" placeholder="Enter your city..." ng-model="search">
-						<input type="submit" value="Find" ng-click="geoCode()" ng-disabled="search.length == 0">
+						<input type="submit" value="Find" ng-click="findWeather()" ng-disabled="search.length == 0">
 					</form>
 				</div>
 			</div>
@@ -92,7 +92,7 @@
 							        {{loc.lat | lat:0}}, {{loc.lon | lon:0}}
 							    </div>
 								<div class="degree">
-									<div class="num">{{currentTemp | number:0}}<sup>o</sup>C</div>
+									<div class="num">{{currentTemp | number:0}}<sup>o</sup>F</div>
 									<div class="forecast-icon" ng-cloak>
 										<img src="images/icons/{{icon}}.svg" alt="{{summary}}" width=90>
 									</div>	
@@ -110,8 +110,8 @@
 								<div class="forecast-icon">
 									<img src="images/icons/{{dayReport.icon}}.svg" alt="{{dateReport.summary}}" width=48>
 								</div>
-								<div class="degree">{{dayReport.temperatureMax | number:0}}<sup>o</sup>C</div>
-								<small>{{dayReport.temperatureMin | number:0}}<sup>o</sup></small>
+								<div class="degree">{{dayReport.temperatureMax | number:0}}<sup>o</sup>F</div>
+								<small>{{dayReport.temperatureMin | number:0}}<sup>o</sup>F</small>
 							</div>
 						</div>
 					</div>
@@ -188,7 +188,7 @@
 						</div>
 					</div>
 
-					<p class="colophon">Copyright 2016 SkyCast. Designed by Themezy. Developed by Tung Ling Lin. Powered by Google Geocode API, Forecast.io API, Angular, and Firebase. All rights reserved</p>
+					<p class="colophon">Copyright 2016 SkyCast. Designed by Themezy. Developed by Tung Ling Lin. Powered by Google Geocode API, Forecast, Angular, and Firebase. All rights reserved</p>
 				</div>
 			</footer> <!-- .site-footer -->
 		</div>

@@ -1674,3 +1674,18 @@ form textarea {
     .site-footer .social-links a:hover {
       background: #009ad8;
       color: white; }
+
+.axis {
+  color: white;
+}
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}

@@ -8,29 +8,29 @@
 		<title>SkyCast Time Capsule</title>
 
 		<!-- Loading third party fonts -->
-		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+		<link href="//fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
 		<link href="fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 		<!-- Loading main css file -->
 		<link rel="stylesheet" href="style.css">
 
 		<!-- jQuery library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 		<!-- Latest compiled JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 		<!-- Latest AngularJS -->
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
 
-		<script src="http://maps.googleapis.com/maps/api/js?language=en"></script>
+		<script src="//maps.googleapis.com/maps/api/js?language=en"></script>
 
-		<script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
-		<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+		<script src="//cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+		<script src="//cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
 
-		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		
 		<!--[if lt IE 9]>
 		<script src="js/ie-support/html5.js"></script>
@@ -83,7 +83,7 @@
 						<div class="row">
 							<div class="col-md-10 col-md-offset-2">
 								<h3 class="section-title">Time Capsule</h3>
-								<p>This feature will allow you to view historic or futuristic weather information in chart/graph of a chosen area</p>
+								<p>*In experiment* This feature will allow you to view historic or futuristic weather information (currently only 24 hours forecast of temperature available) in chart/graph of a chosen area</p>
 								<br>
 							</div>
 						</div>
@@ -108,10 +108,20 @@
 						</div>
 					</div>
 				</div>
-				<div class="fullwidth-block">
+				<br>
+				<div class="fullwidth-block" ng-show="hoursReport">
 					<div class="container">
-						<div class="col-md-10 col-md-offset-1">
-							<svg id="visualisation" height="501.25" width="802"></svg>
+						<h1 style="text-align:center;" ng-show="hoursReport"> Forecast at {{ search }}</h1>
+						<h1 style="text-align:center;" ng-show="hoursReport"> On {{ capsuleDate | date: 'EEE MMMM d yyyy'}}</h1>
+						<div class="forecast-container" data-bg-color="#ffffff">
+							<div class="col-md-10 col-md-offset-1">
+								<svg id="visualisation" height="500" width="802"></svg>
+							</div>
+						</div>
+						<div class="row">
+							<div class="text-right col-md-8">
+								<input type="submit" value="Clear Chart" ng-click="clearChart()">
+							</div>
 						</div>
 					</div>
 				</div>

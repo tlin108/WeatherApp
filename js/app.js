@@ -39,8 +39,6 @@ app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray',
                     var loc = results[0].geometry.location;
                     $scope.search = results[0].formatted_address;
                     $scope.gotoLocation(loc.lat(), loc.lng());
-                    $scope.findWeather(loc.lat(), loc.lng());
-                    $scope.addToSearchHistory();
                 } else {
                     alert("Sorry, this search produced no results.");
                 }
@@ -49,9 +47,11 @@ app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray',
     };
 
     // find current weather using forecast.io api
-    $scope.findWeather = function (lat, lon) {
+    $scope.findWeather = function () {
+
+        $scope.geoCode();
         
-        var url = 'https://api.forecast.io/forecast/07bb8b7f6f8767a188e5d47ac551ef42' + '/' + lat + ',' + lon + '?callback=JSON_CALLBACK';
+        var url = 'https://api.forecast.io/forecast/07bb8b7f6f8767a188e5d47ac551ef42' + '/' + $scope.loc.lat + ',' + $scope.loc.lon + '?callback=JSON_CALLBACK';
         
         $http.jsonp(url)
         .success(function(data){
@@ -63,101 +63,144 @@ app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray',
             $scope.today = new Date();
             $scope.summary = data.currently.summary;
             $scope.weekReport = data.daily.data;
-            console.log(data);
+            //console.log(data);
+            $scope.addToSearchHistory();
         }).error(function(status){
             console.log(status);
         });
         
     };
 
-    $scope.timeCapsule = function () {
-        console.log($scope.search);
-        console.log(Date.parse($scope.capsuleDate));
+    // find historic or futuristic weather using forecast.io api
+    $scope.findDetailedWeather= function (date) {
 
-        function InitChart() {
-                    var data = [{
-                        "sale": "202",
-                        "year": "2000"
-                    }, {
-                        "sale": "215",
-                        "year": "2002"
-                    }, {
-                        "sale": "179",
-                        "year": "2004"
-                    }, {
-                        "sale": "199",
-                        "year": "2006"
-                    }, {
-                        "sale": "134",
-                        "year": "2008"
-                    }, {
-                        "sale": "176",
-                        "year": "2010"
-                    }];
-                    var data2 = [{
-                        "sale": "152",
-                        "year": "2000"
-                    }, {
-                        "sale": "189",
-                        "year": "2002"
-                    }, {
-                        "sale": "179",
-                        "year": "2004"
-                    }, {
-                        "sale": "199",
-                        "year": "2006"
-                    }, {
-                        "sale": "134",
-                        "year": "2008"
-                    }, {
-                        "sale": "176",
-                        "year": "2010"
-                    }];
-                    var vis = d3.select("#visualisation"),
-                        WIDTH = 1000,
-                        HEIGHT = 500,
-                        MARGINS = {
-                            top: 20,
-                            right: 20,
-                            bottom: 20,
-                            left: 50
-                        },
-                        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2000, 2010]),
-                        yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([134, 215]),
-                        xAxis = d3.svg.axis()
-                        .scale(xScale),
-                        yAxis = d3.svg.axis()
-                        .scale(yScale)
-                        .orient("left");
-                    
-                    vis.append("svg:g")
-                        .attr("class", "x axis")
-                        .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
-                        .call(xAxis);
-                    vis.append("svg:g")
-                        .attr("class", "y axis")
-                        .attr("transform", "translate(" + (MARGINS.left) + ",0)")
-                        .call(yAxis);
-                    var lineGen = d3.svg.line()
-                        .x(function(d) {
-                            return xScale(d.year);
-                        })
-                        .y(function(d) {
-                            return yScale(d.sale);
-                        })
-                        .interpolate("basis");
-                    vis.append('svg:path')
-                        .attr('d', lineGen(data))
-                        .attr('stroke', 'green')
-                        .attr('stroke-width', 2)
-                        .attr('fill', 'none');
-                    vis.append('svg:path')
-                        .attr('d', lineGen(data2))
-                        .attr('stroke', 'blue')
-                        .attr('stroke-width', 2)
-                        .attr('fill', 'none');
+        $scope.geoCode();
+        
+        var url = 'https://api.forecast.io/forecast/07bb8b7f6f8767a188e5d47ac551ef42' + '/' + $scope.loc.lat + ',' + $scope.loc.lon + ',' + date + '?callback=JSON_CALLBACK';
+        
+        $http.jsonp(url)
+        .success(function(data){
+            $scope.hoursReport = data.hourly.data;
+            console.log(data);
+            $scope.addToSearchHistory();
+            $scope.dataGroup = d3.nest().key(function(d){
+                return d.time;
+            }).entries($scope.hoursReport);
+            $scope.InitChart();
+        }).error(function(status){
+            console.log(status);
+        });
+        
+    };
+
+    // clear the d3 chart, but having issue remaking the chart
+    $scope.clearChart = function () {
+
+        d3.selectAll('svg').remove();
+        $scope.hoursReport = null;
+
+    };
+
+    $scope.InitChart = function () {
+         
+        // reformat key   
+        $scope.dataGroup.forEach(function (d) { 
+            d.key = new Date(d.key * 1000); 
+        });
+
+        //console.log($scope.dataGroup); 
+
+        var margin = {"top": 20, "right": 20, "bottom": 20, "left": 30, "axis": 20};
+        var width = 805 + margin.right + margin.left;
+        var height = 500 + margin.top + margin.bottom;
+        var timeFormat = d3.time.format("%I:%M %p");
+
+        // set up chart
+        var svg = d3.select("#visualisation").attr("width", width).attr("height", height);
+        var chart = d3.select("svg");
+
+        // find data range
+        var xMin = d3.min($scope.dataGroup, function(d) { return Math.min(d.key); });
+        var xMax = d3.max($scope.dataGroup, function(d) { return Math.max(d.key); });
+
+        var yMin = 0;
+        var yMax = 100;
+
+        // debugging purpose
+        /*
+        console.log("yMin" + " " + yMin);
+        console.log("yMax" + " " + yMax);
+
+        console.log("xMin" + " " + xMin);
+        console.log("xMax" + " " + xMax);
+        */
+
+        // scale using ranges
+        var xScale = d3.time.scale()
+            .domain([xMin, xMax])
+            .range([margin.left, width - margin.right]);
+
+        var xAxisScale = d3.time.scale()
+           .domain([xMin, xMax])
+           .range([margin.left, width - margin.axis]);
+
+        var yScale = d3.scale.linear()
+            .domain([yMin, yMax])
+            .range([height - margin.top, margin.bottom]);
+
+        // set up axes
+        var yAxis = d3.svg.axis()
+            .scale(yScale)
+            .orient("left")
+            .ticks(20);
+              
+        var xAxis = d3.svg.axis()
+            .scale(xAxisScale)
+            .orient("bottom")
+            .ticks(5)
+            .tickFormat(timeFormat);
+
+        var valueLine = d3.svg.line()
+            .x(function(d) { return xScale(d.key); })
+            .y(function(d) { return yScale(d.values[0].temperature); })
+            .interpolate("cardinal");
+
+        // create line
+        chart.append("path")
+            .attr("class", "line")
+            .attr("stroke-width", 2)
+            .attr('fill', 'none')
+            .attr('stroke', 'blue')
+            .attr("d", valueLine($scope.dataGroup));
+            
+        // create scatter plot
+        chart.selectAll("circle")
+            .data($scope.dataGroup)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) {
+                return xScale(d.key);
+            })
+            .attr("cy", function (d) {
+                return yScale(d.values[0].temperature);
+            })
+            .attr("r", 5)
+            .attr("fill", "#0B9BD7");
+
+        // append axis
+        chart.append('g').call(xAxis)
+            .attr('transform', 'translate(0, ' + (height - margin.bottom) + ')')
+            .attr('class', 'axis');
+
+        chart.append('g').call(yAxis)
+            .attr('transform', "translate(" + (margin.left) + ",0)")
+            .attr('class', 'axis');
         }
-        InitChart();
+
+    // time capsule feature
+    $scope.timeCapsule = function () {
+
+        $scope.findDetailedWeather(Date.parse($scope.capsuleDate)/1000);
     }
 
     // format data into readable date & time
@@ -167,7 +210,7 @@ app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray',
 
     };
     
-
+    // add search query to user history
     $scope.addToSearchHistory = function (){
         if($scope.authData){
             var userID = $scope.authData.uid;
@@ -187,6 +230,7 @@ app.controller('weatherCtrl', ['$scope', '$http', 'Auth','$firebaseArray',
         }
     };
 
+    // shows user's search history
     $scope.showSearchHistory = function (){
         if($scope.authData){
 
@@ -210,6 +254,7 @@ app.factory('Auth', ['$firebaseAuth', function($firebaseAuth){
     return $firebaseAuth(myFirebaseRef);
 }]);
 
+// controller for user related activity (login/signup/logout)
 app.controller('userCtrl', ['$scope', 'Auth', function($scope, Auth){
 
     $scope.auth = Auth;
